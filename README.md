@@ -79,6 +79,8 @@ A **production-ready** AI system for interviews and portfolios. Features AI agen
 
 ✅ **You're live!** Share the URL with interviewers.
 
+> ⚠️ **Render Free Tier Limitation**: This project uses ML models (sentence-transformers ~500MB) that **cannot run on Render's free tier**. Frontend/health checks work, but embeddings/chat endpoints timeout (502). For production ML workloads, use Railway, Hugging Face Spaces, or run locally. See [docs/PLATFORM_CHOICE.md](docs/PLATFORM_CHOICE.md) for details.
+
 ### Option B: Run Locally
 
 **For development or testing locally**

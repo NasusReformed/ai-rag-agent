@@ -7,11 +7,12 @@
 | **Speed** | ⚡ 1-2 min deploy | ⏱️ 2-3 min deploy |
 | **UI** | Modern, clean | Simpler, functional |
 | **Free Tier** | 7 days trial | Persistent free plan |
+| **ML Support** | ✅ Full (500MB+ models) | ❌ Limited (no ML on free) |
 | **Auto-Deploy** | Yes (git push) | Yes (git push) |
 | **Database** | PostgreSQL addon | Separate PostgreSQL |
 | **Debugging** | Better logs | Good logs |
 | **Cost** | ~$20/month | ~$15/month |
-| **Recommendation** | ⭐ Faster, modern | ✅ Cheaper, free tier |
+| **Recommendation** | ⭐ **REQUIRED** for this project | ⚠️ Free tier won't run ML |
 
 ---
 
@@ -47,29 +48,43 @@
 - ✅ Custom domains included
 
 **Cons:**
+- ❌ **Free tier CANNOT run ML models** (sentence-transformers needs ~500MB RAM)
 - ❌ Free tier: spins down after 15min inactivity
 - ❌ Slower initial deploy (3 min)
 - ❌ Limited metrics on free tier
 
-**Best For:** Portfolio demos, side projects, learning
+**Free Tier Behavior for This Project:**
+- ✅ Frontend works (static files)
+- ✅ Health checks work
+- ✅ Database connection works
+- ❌ `/api/embeddings/index` → 502 timeout
+- ❌ `/api/agent/chat` → 502 timeout
+
+**Best For:** Non-ML apps, static sites, simple APIs
 
 ---
 
 ## For This Project
 
-**Recommendation: Railway** (if cost not an issue)
+**Recommendation: Railway** ⭐ **REQUIRED for ML functionality**
 
 Reasoning:
+- **This project uses ML models**: sentence-transformers (~500MB) for embeddings
+- **Render free tier limitation**: Cannot run ML workloads (502 timeout)
 - **Interview use**: You want fast demo without cold starts
 - **Reliability**: No spinning down means no delays
 - **Modern infra**: Shows you know modern platforms
 
-**If budget-conscious: Render**
+**Alternative: Hugging Face Spaces**
+- Free hosting optimized for ML models
+- Built-in GPU support
+- Gradio/Streamlit integration
+- Perfect for ML demos
 
-Reasoning:
-- **Free forever**: Demo anytime without charges
-- **Simpler**: Less to configure
-- **Acceptable downtime**: OK for interview practice (30s wake-up)
+**If budget-conscious:**
+- ✅ **Run locally** (fully functional, no cost)
+- ⚠️ Render Starter Plan ($7/month) - should work for ML
+- ❌ **NOT Render Free Tier** - ML endpoints will timeout
 
 ---
 
