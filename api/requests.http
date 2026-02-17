@@ -1,0 +1,55 @@
+### Health
+GET http://localhost:8000/api/health
+
+### Index documents
+POST http://localhost:8000/api/embeddings/index
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "content": "Acme Support: We offer 24/7 support for enterprise clients. Standard response time is under 4 hours.",
+      "metadata": {"source": "kb", "category": "support"}
+    },
+    {
+      "content": "Billing policy: Invoices are issued on the first business day of each month.",
+      "metadata": {"source": "kb", "category": "billing"}
+    }
+  ]
+}
+
+### Agent chat (RAG + tools)
+POST http://localhost:8000/api/agent/chat
+Content-Type: application/json
+
+{
+  "session_id": null,
+  "user_id": "u_1001",
+  "message": "Necesito ayuda con facturacion. Cual es la politica?"
+}
+
+### Search documents
+GET http://localhost:8000/api/embeddings/search?query=policy&top_k=3
+
+### Create ticket via tool endpoint
+POST http://localhost:8000/api/tools/execute
+Content-Type: application/json
+
+{
+  "tool_name": "create_ticket",
+  "tool_args": {
+    "title": "Problema con facturacion",
+    "priority": "high",
+    "user_id": "u_1001",
+    "context": {"channel": "api"}
+  }
+}
+
+### n8n webhook
+POST http://localhost:8000/api/automation/n8n/webhook
+Content-Type: application/json
+
+{
+  "event_type": "crm_sync",
+  "payload": {"count": 10, "source": "n8n"}
+}

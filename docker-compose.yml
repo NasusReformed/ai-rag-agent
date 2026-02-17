@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_DB_URL=${SUPABASE_DB_URL}
+      - LLM_PROVIDER=${LLM_PROVIDER:-hf}
+      - HF_MODEL=${HF_MODEL:-mistralai/Mistral-7B-Instruct-v0.1}
+      - EMBEDDINGS_MODEL=${EMBEDDINGS_MODEL:-sentence-transformers/all-MiniLM-L6-v2}
+      - RAG_TOP_K=${RAG_TOP_K:-4}
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

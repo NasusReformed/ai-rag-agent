@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+*.pem
+*.key
+*.crt
+secrets/
+.secrets
+credentials/
+
+# Database & Cache
+*.db
+*.sqlite
+*.sqlite3
+.cache/
+huggingface_cache/
+node_modules/
+
+# Build & Distribution
+dist/
+build/
+*.egg-info/
+.eggs/
+*.egg
+
+# IDE Generated
+.mypy_cache/
+.pytest_cache/
+.coverage
+.hypothesis/
+htmlcov/
+
+# Logs
+*.log
+logs/
+
+# Temporary
+*.tmp
+*.bak
+~*
+.DS_Store
