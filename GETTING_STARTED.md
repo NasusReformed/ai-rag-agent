@@ -24,25 +24,39 @@ pip install -r backend/requirements.txt
 cp .env.example .env
 ```
 
-Edit `.env` and set your database connection:
+Edit `.env` and set your Supabase connection:
 
 ```bash
-DATABASE_URL=postgresql://user:pass@localhost:5432/dbname
+# Get this from Supabase: Settings → Database → Connection String (URI mode)
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
 HF_API_TOKEN=your_huggingface_token
 ```
 
-Get a free Hugging Face token at https://huggingface.co/settings/tokens
+**Getting your Supabase URL:**
+1. Go to https://supabase.com/dashboard
+2. Select your project (or create one)
+3. Navigate to Settings → Database
+4. Copy the "Connection string" under "URI"
+5. Replace `[YOUR-PASSWORD]` with your database password
+
+**Hugging Face Token:**
+Get a free token at https://huggingface.co/settings/tokens
 
 ### 3. Initialize Database
 
-```bash
-# Using psql
-psql $DATABASE_URL < database/schema.sql
+**Option A: Supabase SQL Editor (Recommended)**
+1. Open your Supabase project
+2. Go to SQL Editor
+3. Create a new query
+4. Paste the contents of `database/schema.sql`
+5. Run the query
 
-# Or import via SQL client (DBeaver, pgAdmin, etc.)
+**Option B: psql command line**
+```bash
+psql $DATABASE_URL < database/schema.sql
 ```
 
-This creates tables and enables the pgvector extension for semantic search.
+The pgvector extension comes pre-installed on Supabase.
 
 ### 4. Start Server
 
@@ -62,30 +76,19 @@ Open http://localhost:8000 in your browser.
 - Test semantic search
 - Execute tools
 
-## Production Deployment
+## Next Steps
 
-For deploying to the cloud, see:
-- [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) - Step-by-step deployment guide
-- [docs/PLATFORM_CHOICE.md](docs/PLATFORM_CHOICE.md) - Railway vs other platforms
+### Recommended: Supabase (Free Tier)
+- 500MB PostgreSQL database
+- pgvector extension pre-installed
+- Free tier includes 2 projects
+- Web-based SQL editor
+- Setup: https://supabase.com/dashboard
 
-Quick deployment to Railway:
-
-```bash
-railway login
-railway link
-railway add postgresql
-railway variables set HF_API_TOKEN=your_token
-railway up
-```
-
-Then run `database/schema.sql` in the Railway PostgreSQL console.
-
-## Database Options
-
-### Free Tiers
-- **Supabase** - 500MB PostgreSQL with pgvector support
-- **Railway** - PostgreSQL included with new projects
-- **Neon** - Serverless PostgreSQL
+### Alternatives
+- **Railway** - PostgreSQL addon, $5/month
+- **Neon** - Serverless PostgreSQL, generous free tier
+- **Local PostgreSQL** - Full control, requires setup
 
 ### Local Development
 ```bash

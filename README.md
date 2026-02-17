@@ -42,7 +42,7 @@ pip install -r backend/requirements.txt
 
 # Configure database
 cp .env.example .env
-# Set DATABASE_URL to your PostgreSQL instance
+# Set DATABASE_URL to your Supabase PostgreSQL instance
 
 # Initialize schema
 psql $DATABASE_URL < database/schema.sql
@@ -54,28 +54,16 @@ uvicorn app.main:app --reload
 
 Visit http://localhost:8000 to access the dashboard.
 
-### Production Deployment
+### Database Setup (Supabase)
 
-Recommended platform: Railway (supports ML workloads)
+1. Create a project at https://supabase.com
+2. Get your PostgreSQL connection string from Settings → Database
+3. Run the schema:
+   - Option A: Use Supabase SQL Editor and paste `database/schema.sql`
+   - Option B: Connect via `psql` using the connection string
+4. The pgvector extension is pre-installed on Supabase
 
-```bash
-# Connect Railway CLI
-railway login
-railway link
-
-# Add PostgreSQL
-railway add postgresql
-
-# Set environment variables
-railway variables set HF_API_TOKEN=your_token
-
-# Deploy
-railway up
-```
-
-Database initialization: Run `database/schema.sql` in Railway PostgreSQL query editor.
-
-**Note:** Render's free tier has insufficient resources for ML models. Use Railway or run locally for full functionality.
+See [GETTING_STARTED.md](GETTING_STARTED.md) for detailed setup instructions.
 
 ## Project Structure
 
@@ -121,7 +109,10 @@ See `api/requests.http` for example requests.
 Required configuration in `.env`:
 
 ```bash
-DATABASE_URL=postgresql://user:pass@host:5432/db
+# Supabase PostgreSQL connection
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+
+# Hugging Face API token (free at https://huggingface.co/settings/tokens)
 HF_API_TOKEN=hf_...
 HF_MODEL=meta-llama/Llama-3.2-3B-Instruct
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
