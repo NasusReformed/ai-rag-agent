@@ -1,4 +1,14 @@
-const API_BASE = 'http://localhost:8000/api';
+// Detecta automáticamente si está en localhost o producción
+const getApiBase = () => {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:8000/api';
+    } else {
+        // En producción, usa la misma URL raíz (sin /api al final)
+        return `${window.location.origin}/api`;
+    }
+};
+
+const API_BASE = getApiBase();
 let currentSessionId = null;
 
 // Check API status
