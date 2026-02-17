@@ -1,71 +1,121 @@
-# 🎯 Getting Started Guide
+# Getting Started
 
-Welcome! Here's what to do next:
+This guide will get you from clone to running instance in under 10 minutes.
 
-## 1️⃣ First Time? (5 seconds)
+## Prerequisites
 
-This is an **AI Agent RAG System** - a production-ready project for interviews.
+- Python 3.12
+- PostgreSQL database (local or cloud)
+- Git
 
-**What to do:**
-- Read the [README.md](README.md) (top page - you might already be here!)
-- Then go to [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md)
+## Local Setup
 
-## 2️⃣ Want to Deploy? (25 minutes)
+### 1. Install Dependencies
 
-Follow this checklist:
-
-```
-1. Push to GitHub              [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)
-   └─ git push your code
-
-2. Deploy to Railway           [docs/RAILWAY_SETUP.md](docs/RAILWAY_SETUP.md)
-   └─ Connect GitHub repo
-   └─ Add PostgreSQL
-   └─ Set env vars
-   └─ Deploy!
-
-3. Initialize Database         [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md)
-   └─ Run database/schema.sql
-
-4. Test Dashboard
-   └─ Go to your URL
-   └─ Click "Load Demo Data"
-   └─ Try Chat, Search, Tools
-
-✅ Done! Share URL with friends/interviewers
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r backend/requirements.txt
 ```
 
-**Time estimate: 25 minutes**
+### 2. Configure Environment
 
-## 3️⃣ Understanding the Project?
+```bash
+cp .env.example .env
+```
 
-- **Architecture**: [docs/SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md)
-- **Code location**: [backend/](backend/) (FastAPI Python)
-- **Database**: [database/schema.sql](database/schema.sql) (PostgreSQL)
-- **Dashboard**: [backend/app/static/](backend/app/static/) (HTML/CSS/JS)
+Edit `.env` and set your database connection:
 
-## 4️⃣ Choosing Where to Deploy?
+```bash
+DATABASE_URL=postgresql://user:pass@localhost:5432/dbname
+HF_API_TOKEN=your_huggingface_token
+```
 
-- **Railway**: Recommended (fast, prof professional) - [docs/RAILWAY_SETUP.md](docs/RAILWAY_SETUP.md)
-- **Render**: Alternative (free tier) - [docs/RENDER_SETUP.md](docs/RENDER_SETUP.md)
-- **Comparison**: [docs/PLATFORM_CHOICE.md](docs/PLATFORM_CHOICE.md)
+Get a free Hugging Face token at https://huggingface.co/settings/tokens
 
-## 5️⃣ Troubleshooting?
+### 3. Initialize Database
 
-Check [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md) for common issues.
+```bash
+# Using psql
+psql $DATABASE_URL < database/schema.sql
 
----
+# Or import via SQL client (DBeaver, pgAdmin, etc.)
+```
 
-## Quick Links
+This creates tables and enables the pgvector extension for semantic search.
 
-| What I want to... | Go to... |
-|-------------------|----------|
-| Deploy to production | [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md) ⭐ |
-| Understand the system | [docs/SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md) |
-| Compare Railway vs Render | [docs/PLATFORM_CHOICE.md](docs/PLATFORM_CHOICE.md) |
-| Run locally | [README.md](README.md#option-b-run-locally) |
-| Fix an error | [docs/DEPLOYMENT_CHECKLIST.md#troubleshooting](docs/DEPLOYMENT_CHECKLIST.md#troubleshooting) |
+### 4. Start Server
 
----
+```bash
+cd backend
+uvicorn app.main:app --reload
+```
 
-**Next step:** Go to [docs/DEPLOYMENT_CHECKLIST.md](docs/DEPLOYMENT_CHECKLIST.md) 📋
+Server runs at http://localhost:8000
+
+### 5. Test the Dashboard
+
+Open http://localhost:8000 in your browser.
+
+- Click "Load Demo Data" to index sample documents
+- Try the chat interface
+- Test semantic search
+- Execute tools
+
+## Production Deployment
+
+For deploying to the cloud, see:
+- [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) - Step-by-step deployment guide
+- [docs/PLATFORM_CHOICE.md](docs/PLATFORM_CHOICE.md) - Railway vs other platforms
+
+Quick deployment to Railway:
+
+```bash
+railway login
+railway link
+railway add postgresql
+railway variables set HF_API_TOKEN=your_token
+railway up
+```
+
+Then run `database/schema.sql` in the Railway PostgreSQL console.
+
+## Database Options
+
+### Free Tiers
+- **Supabase** - 500MB PostgreSQL with pgvector support
+- **Railway** - PostgreSQL included with new projects
+- **Neon** - Serverless PostgreSQL
+
+### Local Development
+```bash
+# macOS
+brew install postgresql pgvector
+
+# Ubuntu
+sudo apt-get install postgresql postgresql-contrib
+```
+
+Enable pgvector extension:
+```sql
+CREATE EXTENSION vector;
+```
+
+## Next Steps
+
+- Review [docs/SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md) for architecture details
+- Check `api/requests.http` for example API calls
+- Explore the codebase structure in [README.md](README.md)
+
+## Common Issues
+
+**pgvector not found**: Ensure the extension is installed and enabled
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+**HF_API_TOKEN invalid**: Generate a new token at https://huggingface.co/settings/tokens
+
+**Port 8000 in use**: Change port with `--port 8001` flag
+
+**Database connection failed**: Verify DATABASE_URL format and credentials

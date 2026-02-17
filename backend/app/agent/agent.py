@@ -26,8 +26,6 @@ class AgentService:
         memory = get_recent_messages(session_id)
         context = format_context(sources, memory)
 
-        # For demo: simplified agent logic (skip LLM planning to avoid HF queue issues)
-        # In production, use Claude API or Ollama local
         tool_result: Any | None = None
         if "ticket" in request.message.lower() or "crear" in request.message.lower():
             tool_result = self.registry.execute("create_ticket", {
@@ -37,7 +35,6 @@ class AgentService:
                 "context": {"source": "chat"}
             })
 
-        # Build answer from context
         answer = f"Based on the knowledge base:\n"
         for src in sources[:2]:
             answer += f"- {src['content'][:100]}...\n"

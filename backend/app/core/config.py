@@ -9,13 +9,13 @@ load_dotenv()
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    supabase_db_url: str = Field(..., alias="SUPABASE_DB_URL")
+    database_url: str = Field(..., alias="DATABASE_URL")
 
     llm_provider: str = Field("hf", alias="LLM_PROVIDER")
     hf_api_token: str = Field("", alias="HF_API_TOKEN")
-    hf_model: str = Field("HuggingFaceH4/zephyr-7b-beta", alias="HF_MODEL")
+    hf_model: str = Field("meta-llama/Llama-3.2-3B-Instruct", alias="HF_MODEL")
     ollama_base_url: str = Field("http://localhost:11434", alias="OLLAMA_BASE_URL")
-    ollama_model: str = Field("llama3", alias="OLLAMA_MODEL")
+    ollama_model: str = Field("llama3.2", alias="OLLAMA_MODEL")
 
     embeddings_model: str = Field(
         "sentence-transformers/all-MiniLM-L6-v2", alias="EMBEDDINGS_MODEL"

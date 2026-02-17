@@ -16,7 +16,7 @@ app = FastAPI(title="AI Agent RAG API", version="1.0.0")
 
 @app.on_event("startup")
 def on_startup() -> None:
-    init_pool(settings.supabase_db_url)
+    init_pool(settings.database_url)
 
 
 @app.on_event("shutdown")
