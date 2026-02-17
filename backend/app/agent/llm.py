@@ -24,7 +24,7 @@ class LLMClient:
                 "return_full_text": False,
             },
         }
-        url = f"https://api-inference.huggingface.co/models/{self.settings.hf_model}"
+        url = f"https://router.huggingface.co/models/{self.settings.hf_model}"
         response = httpx.post(url, json=payload, headers=headers, timeout=60)
         response.raise_for_status()
         data = response.json()
